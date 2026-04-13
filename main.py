@@ -3,10 +3,11 @@ Application entry: main menu, navigation to game and leaderboard.
 """
 
 import pygame
+import os
 from ui import draw_text
 from leaderboard import show_leaderboard
 from game import game_loop
-from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE, init_config
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE, GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, init_config
 from tutorial import show_tutorial
 
 
@@ -50,7 +51,10 @@ def main_menu() -> None:
                     show_tutorial(menu_callback=main_menu)
                     game_loop(main_menu_callback=main_menu)
                 elif event.key == pygame.K_l:
-                    show_leaderboard()
+                    if os.path.isdir(GLOBAL_LEADERBOARD_FILE):
+                        show_leaderboard(GLOBAL_LEADERBOARD_FILE)
+                    else:
+                        show_leaderboard(LOCAL_LEADERBOARD_FILE)
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     quit()

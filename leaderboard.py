@@ -5,10 +5,10 @@ Leaderboard file I/O and display screen.
 import pygame
 from typing import List
 from ui import draw_text
-from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, LEADERBOARD_FILE, MAX_DISPLAY_SCORES
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_DISPLAY_SCORES
 
 
-def read_leaderboard(filename: str = LEADERBOARD_FILE) -> List[int]:
+def read_leaderboard(filename: str) -> List[int]:
     """
     Read leaderboard scores from file.
 
@@ -34,7 +34,7 @@ def read_leaderboard(filename: str = LEADERBOARD_FILE) -> List[int]:
     return scores
 
 
-def write_leaderboard(scores: List[int], filename: str = LEADERBOARD_FILE) -> None:
+def write_leaderboard(scores: List[int], filename: str) -> None:
     """
     Write leaderboard scores to file.
 
@@ -49,7 +49,7 @@ def write_leaderboard(scores: List[int], filename: str = LEADERBOARD_FILE) -> No
             f.write(str(s) + "\n")
 
 
-def update_leaderboard(new_score: int, filename: str = LEADERBOARD_FILE) -> None:
+def update_leaderboard(new_score: int, filename: str) -> None:
     """
     Add a new score to leaderboard and persist it.
 
@@ -63,7 +63,7 @@ def update_leaderboard(new_score: int, filename: str = LEADERBOARD_FILE) -> None
     write_leaderboard(scores, filename)
 
 
-def show_leaderboard() -> None:
+def show_leaderboard(filename: str) -> None:
     """
     Display the local leaderboard screen.
     """
@@ -81,7 +81,7 @@ def show_leaderboard() -> None:
                    SCREEN_WIDTH//2+200, SCREEN_HEIGHT//4+50),
                   size=28, align="center")
 
-        scores = read_leaderboard()
+        scores = read_leaderboard(filename)
         # print(scores)
         for i, s in enumerate(sorted(scores, reverse=True)[:5], start=1):
             draw_text(screen, f"{i}. {s}",

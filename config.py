@@ -13,7 +13,8 @@ WINDOW_TITLE = "3D Cube Stacking"
 
 # Assets
 FONT_PATH = "assets/font_pixel.ttf"
-LEADERBOARD_FILE = "record.txt"
+GLOBAL_LEADERBOARD_FILE = "H:\\std1\\open-day\\leaderboard.txt"
+LOCAL_LEADERBOARD_FILE = "record.txt"
 
 # Gameplay
 INITIAL_CUBE_POS = (-1.0, -1.0, -1.0)

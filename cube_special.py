@@ -28,7 +28,7 @@ def teleport_forward(cube: Cube) -> None:
         new_fraction = random.uniform(current_fraction, min(2.0, current_fraction+0.25))
     else:
         new_fraction = random.uniform(max(0.0, current_fraction-0.25), current_fraction)
-    print("teleport", new_fraction)
+    # print("teleport", new_fraction)
 
     # Interpolate between spawn and target
     new_x = cube.spawn[0] + new_fraction * (cube.target[0] - cube.spawn[0])
