@@ -13,7 +13,7 @@ WINDOW_TITLE = "3D Cube Stacking"
 
 # Assets
 FONT_PATH = "assets/font_pixel.ttf"
-GLOBAL_LEADERBOARD_FILE = "H:\\std1\\open-day\\leaderboard.txt"
+GLOBAL_LEADERBOARD_FILE = "H:/open-day/leaderboard.txt"
 LOCAL_LEADERBOARD_FILE = "record.txt"
 
 # Gameplay
@@ -43,6 +43,9 @@ textures = {
     "var_a": None,
     "var_pos": None
 }
+
+is_global = False
+username = "guest"
 
 def init_config():
     # Window initialize

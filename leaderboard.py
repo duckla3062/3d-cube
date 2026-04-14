@@ -5,7 +5,7 @@ Leaderboard file I/O and display screen.
 import pygame
 from typing import List
 from ui import draw_text
-from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_DISPLAY_SCORES
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_DISPLAY_SCORES, username
 
 
 def read_leaderboard(filename: str) -> List[int]:
@@ -24,9 +24,13 @@ def read_leaderboard(filename: str) -> List[int]:
             count = int(f.readline().strip())
             for _ in range(count):
                 line = f.readline()
+                line = line.split()
+                # print(line)
+                rscore = int(line[0])
+                rname = str(line[1])
                 if not line:
                     break
-                scores.append(int(line.strip()))
+                scores.append([rscore, rname])
     except FileNotFoundError:
         # Initialize an empty file
         with open(filename, "w") as f:
@@ -45,8 +49,8 @@ def write_leaderboard(scores: List[int], filename: str) -> None:
     with open(filename, "w") as f:
         f.write((str(MAX_DISPLAY_SCORES) + "\n"))
         for i in range(MAX_DISPLAY_SCORES):
-            s = scores[i] if i < len(scores) else 0
-            f.write(str(s) + "\n")
+            s = scores[i] if i < len(scores) else [0, "none"]
+            f.write(str(s[0]) + ' ' + str(s[1]) + "\n")
 
 
 def update_leaderboard(new_score: int, filename: str) -> None:
@@ -58,12 +62,12 @@ def update_leaderboard(new_score: int, filename: str) -> None:
         filename (str): Path to leaderboard file.
     """
     scores = read_leaderboard(filename)
-    scores.append(new_score)
+    scores.append([new_score, username])
     scores = sorted(scores, reverse=True)
     write_leaderboard(scores, filename)
 
 
-def show_leaderboard(filename: str) -> None:
+def show_leaderboard(filename: str, title: str) -> None:
     """
     Display the local leaderboard screen.
     """
@@ -72,7 +76,7 @@ def show_leaderboard(filename: str) -> None:
 
     while is_running:
         screen.fill((0, 0, 0))
-        draw_text(screen, "Local Leaderboard",
+        draw_text(screen, title,
                   (SCREEN_WIDTH//4-100, SCREEN_HEIGHT//4-50,
                    SCREEN_WIDTH//2+200, SCREEN_HEIGHT//4),
                   size=32, align="center")
@@ -84,7 +88,7 @@ def show_leaderboard(filename: str) -> None:
         scores = read_leaderboard(filename)
         # print(scores)
         for i, s in enumerate(sorted(scores, reverse=True)[:5], start=1):
-            draw_text(screen, f"{i}. {s}",
+            draw_text(screen, f"{i}. {s[0]}: {s[1]}",
                       (SCREEN_WIDTH//2-200, SCREEN_HEIGHT//4+i*50+50,
                        SCREEN_WIDTH//2+200, SCREEN_HEIGHT//4+i*50+100),
                       size=32, align="center")

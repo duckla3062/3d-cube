@@ -23,7 +23,7 @@ from config import (
     INITIAL_AZIMUTH, INITIAL_ELEVATION, INITIAL_RADIUS,
     ELEVATION_MIN, ELEVATION_MAX, MOUSE_SENSITIVITY,
     ZOOM_STEP, CAMERA_Y_OFFSET, FRAME_DELAY_MS,
-    GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, textures
+    GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, textures, is_global
 )
 
 
@@ -156,10 +156,10 @@ def game_loop(main_menu_callback) -> None:
                 did_lose = stop_and_spawn(stack)
                 if did_lose:
                     score = len(stack) - 2
-                    if os.path.isdir(GLOBAL_LEADERBOARD_FILE):
-                        update_leaderboard(score, GLOBAL_LEADERBOARD_FILE)
-                    else:
-                        update_leaderboard(score, LOCAL_LEADERBOARD_FILE)
+                    leaderboard_file = LOCAL_LEADERBOARD_FILE
+                    if is_global:
+                        leaderboard_file = GLOBAL_LEADERBOARD_FILE
+                    update_leaderboard(score, leaderboard_file)
                     lose_screen(score, restart_callback=game_loop, menu_callback=main_menu_callback)
                     return
 

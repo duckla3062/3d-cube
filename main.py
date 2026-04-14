@@ -7,19 +7,16 @@ import os
 from ui import draw_text
 from leaderboard import show_leaderboard
 from game import game_loop
-from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE, GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, init_config
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE, GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, is_global
 from tutorial import show_tutorial
 
 
 def main_menu() -> None:
     """
     Show the main menu and route to game or leaderboard.
-    """
-    # display_info = pygame.display.Info()
-    # SCREEN_WIDTH, SCREEN_HEIGHT = display_info.current_w, display_info.current_h
-    # DISPLAY = (SCREEN_WIDTH, SCREEN_HEIGHT)
-    # print(DISPLAY)
-    screen = pygame.display.set_mode(DISPLAY) 
+    """             
+    pygame.init()
+    screen = pygame.display.set_mode(DISPLAY)
     pygame.display.set_caption(WINDOW_TITLE)
 
     is_running = True
@@ -33,7 +30,7 @@ def main_menu() -> None:
                   (SCREEN_WIDTH//2-200, SCREEN_HEIGHT//2-50,
                    SCREEN_WIDTH//2+200, SCREEN_HEIGHT//2),
                    size=32, align="center")
-        draw_text(screen, "Press L to view local leaderboard",
+        draw_text(screen, "Press L to view leaderboard",
                   (SCREEN_WIDTH//2-250, SCREEN_HEIGHT//2,
                    SCREEN_WIDTH//2+250, SCREEN_HEIGHT//2+50),
                    size=28, align="center")
@@ -51,17 +48,21 @@ def main_menu() -> None:
                     show_tutorial(menu_callback=main_menu)
                     game_loop(main_menu_callback=main_menu)
                 elif event.key == pygame.K_l:
-                    if os.path.isdir(GLOBAL_LEADERBOARD_FILE):
-                        show_leaderboard(GLOBAL_LEADERBOARD_FILE)
-                    else:
-                        show_leaderboard(LOCAL_LEADERBOARD_FILE)
+                    leaderboard_file = LOCAL_LEADERBOARD_FILE
+                    leaderboard_title = "Local Leaderboard"
+                    if is_global == True:
+                        leaderboard_file = GLOBAL_LEADERBOARD_FILE
+                        leaderboard_title = "Overall Leaderboard"
+                    show_leaderboard(leaderboard_file, leaderboard_title)
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
-                    quit()
 
+                    quit()
+ 
         pygame.display.flip()
 
 
 if __name__ == "__main__":
-    init_config()
+    if os.path.isfile(GLOBAL_LEADERBOARD_FILE):
+        is_global = True
     main_menu()
