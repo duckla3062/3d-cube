@@ -2,10 +2,11 @@
 Leaderboard file I/O and display screen.
 """
 
+import config
 import pygame
 from typing import List
 from ui import draw_text
-from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_DISPLAY_SCORES, username
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_DISPLAY_SCORES
 
 
 def read_leaderboard(filename: str) -> List[int]:
@@ -62,7 +63,7 @@ def update_leaderboard(new_score: int, filename: str) -> None:
         filename (str): Path to leaderboard file.
     """
     scores = read_leaderboard(filename)
-    scores.append([new_score, username])
+    scores.append([new_score, config.username])
     scores = sorted(scores, reverse=True)
     write_leaderboard(scores, filename)
 

@@ -2,10 +2,10 @@
 Main game loop: input handling, camera control, cube movement, and rendering.
 """
 
+import config
 import math
 import time
 import pygame
-import os
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from pygame.locals import DOUBLEBUF, OPENGL
@@ -14,7 +14,6 @@ from models import Cube
 from cube_special import apply_random_acceleration, apply_random_rotation, teleport_forward
 from graphics import load_texture, draw_textured_cuboid
 from game_logic import spawn_next_cube, stop_and_spawn
-from leaderboard import update_leaderboard
 from hud import draw_hud_text
 from lose_screen import lose_screen
 from config import (
@@ -23,7 +22,7 @@ from config import (
     INITIAL_AZIMUTH, INITIAL_ELEVATION, INITIAL_RADIUS,
     ELEVATION_MIN, ELEVATION_MAX, MOUSE_SENSITIVITY,
     ZOOM_STEP, CAMERA_Y_OFFSET, FRAME_DELAY_MS,
-    GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, textures, is_global
+    textures, current_tries
 )
 
 
@@ -85,6 +84,9 @@ def game_loop(main_menu_callback) -> None:
     Parameters:
         on_game_over_callback (function): Called when player loses, with score as argument.
     """
+
+    global current_tries
+    current_tries = current_tries + 1
     pygame.display.set_mode(DISPLAY, DOUBLEBUF | OPENGL)
 
     glEnable(GL_DEPTH_TEST)
@@ -156,10 +158,6 @@ def game_loop(main_menu_callback) -> None:
                 did_lose = stop_and_spawn(stack)
                 if did_lose:
                     score = len(stack) - 2
-                    leaderboard_file = LOCAL_LEADERBOARD_FILE
-                    if is_global:
-                        leaderboard_file = GLOBAL_LEADERBOARD_FILE
-                    update_leaderboard(score, leaderboard_file)
                     lose_screen(score, restart_callback=game_loop, menu_callback=main_menu_callback)
                     return
 
@@ -210,6 +208,7 @@ def game_loop(main_menu_callback) -> None:
         # HUD overlay (score)
         score = len(stack) - 2
         draw_hud_text(f"Score: {score}", 20, SCREEN_HEIGHT - 40)
+        draw_hud_text(f"Try #{current_tries}", SCREEN_WIDTH-120, SCREEN_HEIGHT - 40)
 
         frame_counter = frame_counter+1
 

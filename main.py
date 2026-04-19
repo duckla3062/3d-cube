@@ -2,19 +2,22 @@
 Application entry: main menu, navigation to game and leaderboard.
 """
 
+import config
 import pygame
 import os
 from ui import draw_text
 from leaderboard import show_leaderboard
 from game import game_loop
 from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE, GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, is_global
+from input import input_index
 from tutorial import show_tutorial
-
 
 def main_menu() -> None:
     """
     Show the main menu and route to game or leaderboard.
-    """             
+    """
+
+    global is_global, current_max_score, username
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY)
     pygame.display.set_caption(WINDOW_TITLE)
@@ -45,7 +48,11 @@ def main_menu() -> None:
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    show_tutorial(menu_callback=main_menu)
+                    current_max_score = 0
+                    input_index(menu_callback=main_menu)
+                    if config.username == "":
+                        config.username = "guest"
+                    print(config.username)
                     game_loop(main_menu_callback=main_menu)
                 elif event.key == pygame.K_l:
                     leaderboard_file = LOCAL_LEADERBOARD_FILE

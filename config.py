@@ -23,6 +23,7 @@ SPAWN_RADIUS = 10.0            # distance from target for new cube spawn
 STACK_HEIGHT_STEP = 2.0        # vertical step when spawning a new cube
 ARRIVAL_FRAMES = 100.0         # frames to reach target (controls speed)
 MAX_DISPLAY_SCORES = 10        # number of scores stored
+MAX_TRIES = 3                  # number of tries per round
 
 # Camera
 INITIAL_AZIMUTH = 45.0         # degrees
@@ -43,9 +44,10 @@ textures = {
     "var_a": None,
     "var_pos": None
 }
-
 is_global = False
-username = "guest"
+username = ""
+current_tries = 0
+current_max_score = 0
 
 def init_config():
     # Window initialize
