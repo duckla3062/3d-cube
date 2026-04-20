@@ -22,7 +22,7 @@ from config import (
     INITIAL_AZIMUTH, INITIAL_ELEVATION, INITIAL_RADIUS,
     ELEVATION_MIN, ELEVATION_MAX, MOUSE_SENSITIVITY,
     ZOOM_STEP, CAMERA_Y_OFFSET, FRAME_DELAY_MS,
-    textures, current_tries
+    textures
 )
 
 
@@ -85,8 +85,7 @@ def game_loop(main_menu_callback) -> None:
         on_game_over_callback (function): Called when player loses, with score as argument.
     """
 
-    global current_tries
-    current_tries = current_tries + 1
+    config.current_tries = config.current_tries + 1
     pygame.display.set_mode(DISPLAY, DOUBLEBUF | OPENGL)
 
     glEnable(GL_DEPTH_TEST)
@@ -208,7 +207,7 @@ def game_loop(main_menu_callback) -> None:
         # HUD overlay (score)
         score = len(stack) - 2
         draw_hud_text(f"Score: {score}", 20, SCREEN_HEIGHT - 40)
-        draw_hud_text(f"Try #{current_tries}", SCREEN_WIDTH-120, SCREEN_HEIGHT - 40)
+        draw_hud_text(f"Try #{config.current_tries}", SCREEN_WIDTH-120, SCREEN_HEIGHT - 40)
 
         frame_counter = frame_counter+1
 

@@ -44,7 +44,7 @@ def show_tutorial(menu_callback) -> None:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     start_game_text = ["3", "2", "1", "START!"]
                     for round_text in start_game_text:
                         screen.fill((0, 0, 0))

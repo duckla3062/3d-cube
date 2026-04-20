@@ -47,12 +47,12 @@ def main_menu() -> None:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     current_max_score = 0
                     input_index(menu_callback=main_menu)
                     if config.username == "":
                         config.username = "guest"
-                    print(config.username)
+                    show_tutorial(menu_callback=main_menu)
                     game_loop(main_menu_callback=main_menu)
                 elif event.key == pygame.K_l:
                     leaderboard_file = LOCAL_LEADERBOARD_FILE
@@ -63,7 +63,6 @@ def main_menu() -> None:
                     show_leaderboard(leaderboard_file, leaderboard_title)
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
-
                     quit()
  
         pygame.display.flip()

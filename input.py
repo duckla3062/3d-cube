@@ -13,6 +13,8 @@ def input_index(menu_callback) -> None:
     screen = pygame.display.set_mode(DISPLAY)
     is_running = True
     config.username = ""
+    config.current_max_score = 0
+    config.current_tries = 0
     
     while is_running:
         screen.fill((0, 0, 0))
@@ -42,7 +44,7 @@ def input_index(menu_callback) -> None:
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     return
                 elif event.key == pygame.K_ESCAPE:
                     menu_callback()

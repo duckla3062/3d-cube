@@ -48,8 +48,8 @@ def write_leaderboard(scores: List[int], filename: str) -> None:
         filename (str): Path to leaderboard file.
     """
     with open(filename, "w") as f:
-        f.write((str(MAX_DISPLAY_SCORES) + "\n"))
-        for i in range(MAX_DISPLAY_SCORES):
+        f.write((str(min(len(scores), MAX_DISPLAY_SCORES)) + "\n"))
+        for i in range(min(len(scores), MAX_DISPLAY_SCORES)):
             s = scores[i] if i < len(scores) else [0, "none"]
             f.write(str(s[0]) + ' ' + str(s[1]) + "\n")
 
@@ -63,7 +63,13 @@ def update_leaderboard(new_score: int, filename: str) -> None:
         filename (str): Path to leaderboard file.
     """
     scores = read_leaderboard(filename)
-    scores.append([new_score, config.username])
+    found = False
+    for i in range(len(scores)):
+        if scores[i][1] == config.username:
+            scores[i][0] = max(scores[i][0], new_score)
+            found = True
+    if found == False:
+        scores.append([new_score, config.username])
     scores = sorted(scores, reverse=True)
     write_leaderboard(scores, filename)
 
