@@ -13,8 +13,6 @@ WINDOW_TITLE = "3D Cube Stacking"
 
 # Assets
 FONT_PATH = "assets/font_pixel.ttf"
-GLOBAL_LEADERBOARD_FILE = "H:/open-day/leaderboard.txt"
-LOCAL_LEADERBOARD_FILE = "record.txt"
 
 # Gameplay
 INITIAL_CUBE_POS = (-1.0, -1.0, -1.0)
@@ -38,16 +36,24 @@ CAMERA_Y_OFFSET = 1.0          # small lift above the cube center
 # import Timing
 FRAME_DELAY_MS = 10
 
+# Users
+USER_INCLUDE = [23103, 24094, 24111, 25080, 26022, 26023, 26026, 26034, 26048, 26051, 26070, 26085, 26087, 26098, 26100, 26106, 26117, 26124, 26131, 26133, 26140, 26142]
+USER_EXCLUDE = []
+USER_YEAR_MAX = [119, 149, 126, 151, 124]
+
 # Variable assets
 textures = {
     "normal": None,
     "var_a": None,
     "var_pos": None
 }
-is_global = False
+is_global = True
 username = ""
 current_tries = 0
 current_max_score = 0
+rated_leaderboard_file = "H:/open-day/rated.txt"
+unrated_leaderboard_file = "H:/open-day/unrated.txt"
+rated = False
 
 def init_config():
     # Window initialize

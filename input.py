@@ -5,8 +5,7 @@ Showing a tutorial screen for user.
 import config
 import pygame
 from ui import draw_text
-from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_TRIES
-
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_TRIES, USER_INCLUDE, USER_EXCLUDE, USER_YEAR_MAX
 
 def input_index(menu_callback) -> None:
 
@@ -59,3 +58,30 @@ def input_index(menu_callback) -> None:
         pygame.display.flip()
 
     return
+
+def is_student(username: str) -> bool:
+    isnum = True
+    for char in username:
+        if char.isdigit() == False:
+            isnum = False
+            break
+    if isnum == False:
+        return False
+    num = int(username)
+    if num > 31999:
+        return False
+    elif num < 27000:
+        for i in USER_INCLUDE:
+            if i == num:
+                return True
+        return False
+    else:
+        q = num//1000-27
+        r = num%1000
+        if r > USER_YEAR_MAX[q]:
+            return False
+        for i in USER_EXCLUDE:
+            if i == num:
+                return False
+        return True
+    

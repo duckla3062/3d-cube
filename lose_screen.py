@@ -6,10 +6,7 @@ import config
 import pygame
 from ui import draw_text
 from leaderboard import update_leaderboard
-from config import (
-    DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT,
-    MAX_TRIES, GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE
-)
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, MAX_TRIES
 
 
 def lose_screen(score: int, restart_callback, menu_callback):
@@ -62,10 +59,10 @@ def lose_retry(score: int, restart_callback, menu_callback):
                 if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
                     restart_callback(main_menu_callback=menu_callback)
                 elif event.key == pygame.K_ESCAPE:
-                    leaderboard_file = LOCAL_LEADERBOARD_FILE
-                    if config.is_global:
-                        leaderboard_file = GLOBAL_LEADERBOARD_FILE
-                    update_leaderboard(config.current_max_score, leaderboard_file)
+                    if config.rated:
+                        update_leaderboard(config.current_max_score, config.rated_leaderboard_file)
+                    else:
+                        update_leaderboard(config.current_max_score, config.unrated_leaderboard_file)
                     menu_callback()
 
         pygame.display.flip()
@@ -78,10 +75,10 @@ def lose_final(score: int, menu_callback):
         score (int): Final score achieved before losing.
     """
 
-    leaderboard_file = LOCAL_LEADERBOARD_FILE
-    if config.is_global:
-        leaderboard_file = GLOBAL_LEADERBOARD_FILE
-    update_leaderboard(config.current_max_score, leaderboard_file)
+    if config.rated:
+        update_leaderboard(config.current_max_score, config.rated_leaderboard_file)
+    else:
+        update_leaderboard(config.current_max_score, config.unrated_leaderboard_file)
 
     screen = pygame.display.set_mode(DISPLAY)
     is_running = True

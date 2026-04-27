@@ -84,7 +84,7 @@ def show_leaderboard(filename: str, title: str) -> None:
     while is_running:
         screen.fill((0, 0, 0))
         draw_text(screen, title,
-                  (SCREEN_WIDTH//4-100, SCREEN_HEIGHT//4-50,
+                  (SCREEN_WIDTH//2-200, SCREEN_HEIGHT//4-50,
                    SCREEN_WIDTH//2+200, SCREEN_HEIGHT//4),
                   size=32, align="center")
         draw_text(screen, "Press ESC to return",
@@ -104,7 +104,17 @@ def show_leaderboard(filename: str, title: str) -> None:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                is_running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    is_running = False
+                elif event.key == pygame.K_TAB:
+                    if filename == config.rated_leaderboard_file:
+                        filename = config.unrated_leaderboard_file
+                        title = title[:-11]
+                        title += " (Others)"
+                    else:
+                        filename = config.rated_leaderboard_file
+                        title = title[:-9]
+                        title += " (Students)"
 
         pygame.display.flip()

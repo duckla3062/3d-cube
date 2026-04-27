@@ -8,8 +8,8 @@ import os
 from ui import draw_text
 from leaderboard import show_leaderboard
 from game import game_loop
-from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE, GLOBAL_LEADERBOARD_FILE, LOCAL_LEADERBOARD_FILE, is_global
-from input import input_index
+from config import DISPLAY, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE
+from input import input_index, is_student
 from tutorial import show_tutorial
 
 def main_menu() -> None:
@@ -17,7 +17,6 @@ def main_menu() -> None:
     Show the main menu and route to game or leaderboard.
     """
 
-    global is_global, current_max_score, username
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY)
     pygame.display.set_caption(WINDOW_TITLE)
@@ -48,19 +47,22 @@ def main_menu() -> None:
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE or event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+
                     current_max_score = 0
                     input_index(menu_callback=main_menu)
                     if config.username == "":
                         config.username = "guest"
+                    config.rated = is_student(config.username)
+                    print(config.rated)
+
                     show_tutorial(menu_callback=main_menu)
                     game_loop(main_menu_callback=main_menu)
                 elif event.key == pygame.K_l:
-                    leaderboard_file = LOCAL_LEADERBOARD_FILE
-                    leaderboard_title = "Local Leaderboard"
-                    if is_global == True:
-                        leaderboard_file = GLOBAL_LEADERBOARD_FILE
-                        leaderboard_title = "Overall Leaderboard"
-                    show_leaderboard(leaderboard_file, leaderboard_title)
+                    if config.is_global == True:
+                        leaderboard_title = "Overall Leaderboard (Students)"
+                    else:
+                        leaderboard_title = "Local Leaderboard (Students)"
+                    show_leaderboard(config.rated_leaderboard_file, leaderboard_title)
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     quit()
@@ -69,6 +71,11 @@ def main_menu() -> None:
 
 
 if __name__ == "__main__":
-    if os.path.isfile(GLOBAL_LEADERBOARD_FILE):
-        is_global = True
+    if os.path.isfile(config.rated_leaderboard_file) == False:
+        config.is_global = False
+        config.rated_leaderboard_file = "rated.txt"
+    if os.path.isfile(config.unrated_leaderboard_file) == False:
+        config.is_global = False
+        config.unrated_leaderboard_file = "unrated.txt"
+    config.rated = False
     main_menu()
